@@ -1,3 +1,4 @@
+import javax.swing.plaf.synth.SynthLookAndFeel;
 import java.sql.*;
 
 
@@ -12,7 +13,7 @@ public class Main {
             close the connection
          */
 
-        //create connection
+        //--------------------------create connection------------------------------
         String url = "jdbc:postgresql://localhost:5432/demo";
         String user = "postgres";
         String password = "password";
@@ -24,10 +25,10 @@ public class Main {
         //create statement
         Statement st = con.createStatement();
 
-        String query = "select * from student where sid = 1";
+        String query_1 = "select * from student where sid = 1";
 
         //execute statement
-        ResultSet rs = st.executeQuery(query);
+        ResultSet rs = st.executeQuery(query_1);
 
         //process result set
         // rs.next()); => if it returns a set of results rs.next() will returns true, otherwise false.
@@ -42,12 +43,38 @@ public class Main {
             System.out.println("No data found for sid = 1");
         }
 
+        // Close rs after processing
+        rs.close();
 
-        //close the connection
+        //--------------------------------crud operations----------------------------------
+        //executeQuery will return resultSet and execute can return any type of data
+
+        //create
+        String query_3 = "insert into student values(5, 'John', 48)";
+        boolean status = st.execute(query_3);
+        System.out.println(status);
+
+        //update
+
+        //delete
+
+        //read - loop through all the rows in the table
+        String query_2 = "select * from student";
+        rs = st.executeQuery(query_2);
+
+        while (rs.next()) {
+            // Retrieve data from the current row
+            int studentId = rs.getInt("sid");
+            String sname = rs.getString("sname");
+            int marks = rs.getInt("marks");
+
+            // Do something with the data, like printing it
+            System.out.println("Student ID: " + studentId + ", Name: " + sname + ", marks: " + marks);
+        }
+
+        //-----------------------close the connection------------------------------
         con.close();
         System.out.println("Connection is closed");
-
-
 
     }
 }
